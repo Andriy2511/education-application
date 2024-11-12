@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Додати новий урок</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="~{header/tutor-panel}"></div>
+<div class="container mt-5">
+  <h2 class="mb-4">Додати новий урок</h2>
+  <form th:action="@{/tutor/addTimeSlot}" method="post" th:object="${timeSlotDTO}">
+    <div class="form-group">
+      <label for="date">Дата:</label>
+<!--      <input type="date" class="form-control" id="date" name="date" th:field="*{date}" th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">-->
+      <input type="date" class="form-control" id="date" name="date" th:field="*{date}" th:min="${tomorrow}">
+      <div th:if="${#fields.hasErrors('date')}" class="alert alert-danger">
+        <span th:errors="*{date}"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="startTime">Час початку:</label>
+      <select class="form-control" id="startTime" name="startTime" th:field="*{startTime}">
+        <th:block th:with="timeOptions=${#numbers.sequence(8, 20)}">
+          <th:block th:each="hour : ${timeOptions}">
+            <option th:value="${hour + ':00'}" th:text="${hour + ':00'}"></option>
+            <option th:value="${hour + ':30'}" th:text="${hour + ':30'}"></option>
+          </th:block>
+        </th:block>
+      </select>
+      <div th:if="${#fields.hasErrors('startTime')}" class="alert alert-danger">
+        <span th:errors="*{startTime}"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="duration">Тривалість уроку:</label>
+      <input type="number" class="form-control" id="duration" name="duration" th:field="*{duration}" min="60" max="180" value="60" step="30">
+      <div th:if="${#fields.hasErrors('duration')}" class="alert alert-danger">
+        <span th:errors="*{duration}"></span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Ціна:</label>
+      <input type="number" class="form-control" id="price" name="price" th:field="*{price}" min="0" value="0" step="1">
+      <div th:if="${#fields.hasErrors('price')}" class="alert alert-danger">
+        <span th:errors="*{price}"></span>
+      </div>
+    </div>
+    <div class="form-group form-check">
+      <input type="checkbox" class="form-check-input" id="bookForMonth" name="bookForMonth" th:field="*{bookForMonth}">
+      <label class="form-check-label" for="bookForMonth">Забронювати на місяць вперед</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Додати урок</button>
+  </form>
+  <div th:if="${param.message}" class="alert alert-info" role="alert">
+    <p th:text="${param.message}"></p>
+  </div>
+</div>
+</body>
+</html>

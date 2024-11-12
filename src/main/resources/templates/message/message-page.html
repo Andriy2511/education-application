@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сторінка з повідомленнями</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .messages-container {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .form-container {
+      position: relative;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .form-container form {
+      display: inline-block;
+      max-width: 100%;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 20px;
+      bottom: 0;
+    }
+    .form-container label {
+      display: block;
+    }
+    .form-control, .btn {
+      width: 900px;
+    }
+  </style>
+</head>
+<body>
+<span th:replace="~{${!isUnregistered} ?
+        (${isAdmin} ? 'header/admin-panel' :
+            (${isStudent} ? 'header/student-panel' : 'header/tutor-panel'))
+        : 'header/unregistered-user-panel'}"></span>
+<div class="container messages-container mt-5" id="messageContainer">
+  <h2>Повідомлення</h2>
+  <div th:each="message : ${messages}" class="message">
+    <p th:text="${#dates.format(message.messageDate, 'dd.MM.yyyy HH:mm')} + ' ' + ${message.user.name} + ' ' + ${message.user.surname} + ': ' + ${message.text}"></p>
+  </div>
+</div>
+
+<div class="container form-container">
+  <form th:action="@{/message/sendMessage}" method="post" th:object="${message}">
+    <input type="hidden" name="receiverId" th:value="${receiverId}" />
+    <div class="form-group">
+      <label for="text">Введіть повідомлення:</label>
+      <input type="text" class="form-control" id="text" name="text" th:field="*{text}">
+    </div>
+    <button type="submit" class="btn btn-primary">Відправити</button>
+  </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $("#messageContainer").scrollTop($("#messageContainer")[0].scrollHeight);
+  });
+</script>
+
+</body>
+</html>

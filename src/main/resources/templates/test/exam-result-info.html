@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Питання до тесту</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+</head>
+<body>
+<span th:replace="~{${!isUnregistered} ?
+        (${isAdmin} ? 'header/admin-panel' :
+            (${isStudent} ? 'header/student-panel' : 'header/tutor-panel'))
+        : 'header/unregistered-user-panel'}"></span>
+<div class="container mt-5">
+  <h1 class="mt-4">Питання</h1>
+  <div th:each="answerDTO : ${answerDTOList}" class="card my-4">
+    <div class="card-body">
+      <h5 class="card-title" th:text="${answerDTO.textQuestion}"></h5>
+      <ul class="list-group">
+        <li th:each="option : ${answerDTO.options}" class="list-group-item" th:text="${option.text}"></li>
+      </ul>
+      <p class="card-text">Ваша відповідь: <span th:text="${answerDTO.chosenAnswer}"></span></p>
+      <p class="card-text">Вірна відповідь: <span th:text="${answerDTO.correctAnswer}"></span></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

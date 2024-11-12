@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title>Реєстрація</title>
+    <style>
+        .error-message {
+            color: rgb(211, 15, 15);
+            font-size: 20px;
+            font-weight: bold;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <span th:replace="~{${isRegistered} ? (${isStudent} ? 'header/student-panel' : 'header/tutor-panel') : 'header/unregistered-user-panel'}"></span>
+</nav>
+<div class="background-image"></div>
+<div class="container">
+    <div class="col-md-6 col-md-offset-4">
+        <h1 style="color: rgba(255,255,255,0.8); font-weight: bold;">Зареєструвати нового користувача</h1>
+        <form action="#" th:action="@{/register}" th:object="${userDTO}" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="name" style="color: rgba(255,255,255,0.8); font-weight: bold;">Ім'я:</label>
+                <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="surname" style="color: rgba(255,255,255,0.8); font-weight: bold;">Прізвище:</label>
+                <input type="text" class="form-control" id="surname" th:field="*{surname}" required>
+                <span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="email" style="color: rgba(255,255,255,0.8); font-weight: bold;">Email:</label>
+                <input type="text" class="form-control" id="email" th:field="*{email}" required>
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="password" style="color: rgba(255,255,255,0.8); font-weight: bold;">Пароль:</label>
+                <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></span>
+            </div>
+
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="tutorCheckbox" th:field="*{isTutor}">
+                <label class="form-check-label" for="tutorCheckbox" style="color: rgba(255,255,255,0.8); font-weight: bold;">Я репетитор</label>
+            </div>
+
+            <div class="form-group">
+                <label for="description" style="color: rgba(255,255,255,0.8); font-weight: bold;">Розкажіть про себе (лише для репетиторів):</label>
+                <input type="text" class="form-control" id="description" th:field="*{description}">
+                <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="photo" style="color: rgba(255,255,255,0.8); font-weight: bold;">Додайте фото (лише для репетиторів):</label>
+                <input type="file" class="form-control-file" id="photo" name="photo" th:field="*{photo}" style="color: rgba(255,255,255,0.8); font-weight: bold;">
+                <span th:if="${#fields.hasErrors('photo')}" th:errors="*{photo}">Error name</span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Реєстрація</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

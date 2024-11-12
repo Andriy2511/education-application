@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список викладачів</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="~{header/admin-panel}"></div>
+<div class="container mt-5">
+    <h2>Список викладачів</h2>
+    <div class="pagination">
+        <div class="d-flex flex-column">
+            <div>
+                <form th:action="@{/admin/showTutorsList}" method="get">
+                    <input type="number" id="pageSize" name="pageSize" min="1">
+                    <button type="submit" class="btn btn-primary mb-2">Встановити кількість записів на сторінку</button>
+                </form>
+            </div>
+            <div>
+                <a th:href="@{/admin/showTutorsList(page=${-1})}" class="btn btn-primary" role="button">Попередня сторінка</a>
+                <a th:href="@{/admin/showTutorsList(page=${1})}" class="btn btn-primary" role="button">Наступна сторінка</a>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Ім'я</th>
+            <th>Прізвище</th>
+            <th>Логін</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.surname}"></td>
+            <td th:text="${user.email}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

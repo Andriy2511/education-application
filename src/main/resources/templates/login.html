@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<nav>
+    <span th:replace="~{${isRegistered} ? (${isStudent} ? 'header/student-panel' : 'header/tutor-panel') : 'header/unregistered-user-panel'}"></span>
+</nav>
+<div class="background-image"></div>
+<div class="container">
+    <div class="screen">
+        <div class="screen__content">
+            <form th:action="@{/authorize(error=true)}" th:object="${user}" method="post" class="login">
+                <div class="login__field">
+                    <i class="login__icon fas fa-user"></i>
+                    <input type="text" id="login" name="login" th:field="*{email}" class="login__input" placeholder="Login" required>
+                </div>
+                <div class="login__field">
+                    <i class="login__icon fas fa-lock"></i>
+                    <input type="password" id="password" name="password" th:field="*{password}" class="login__input" placeholder="Password" required>
+                </div>
+                <div th:if="${param.error}">
+                    <p style="color: red;">Невірні дані авторизації</p>
+                </div>
+                <button class="button login__submit">
+                    <span class="button__text">Увійти</span>
+                    <i class="button__icon fas fa-chevron-right"></i>
+                </button>
+                <br><p><b>Ви тут уперше? Натисніть <a th:href="@{/registration}"> тут,</a> щоб зареєструватись.</b></p>
+            </form>
+        </div>
+        <div class="screen__background">
+            <span class="screen__background__shape screen__background__shape4"></span>
+            <span class="screen__background__shape screen__background__shape3"></span>
+            <span class="screen__background__shape screen__background__shape2"></span>
+            <span class="screen__background__shape screen__background__shape1"></span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

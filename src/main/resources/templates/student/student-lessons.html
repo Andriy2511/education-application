@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User's card</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="~{header/student-panel}"></div>
+<div class="container mt-5">
+  <h2 class="mb-3">Заплановані уроки</h2>
+  <div class="pagination">
+    <div class="d-flex flex-column">
+      <div>
+        <form th:action="@{/student/showStudentLessons}" method="get">
+          <input type="number" id="pageSize" name="pageSize" min="1">
+          <button type="submit" class="btn btn-primary mb-2">Встановити кількість записів на сторінку</button>
+        </form>
+      </div>
+      <div>
+        <a th:href="@{/student/showStudentLessons(page=${-1})}" class="btn btn-primary" role="button">Попередня сторінка</a>
+        <a th:href="@{/student/showStudentLessons(page=${1})}" class="btn btn-primary" role="button">Наступна сторінка</a>
+      </div>
+    </div>
+  </div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">Дата</th>
+      <th scope="col">Час початку уроку</th>
+      <th scope="col">Час закінчення уроку</th>
+      <th scope="col">Ціна</th>
+      <th scope="col">Репетитор</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="studentLesson : ${studentLessons}">
+      <td th:text="${#dates.format(studentLesson.timeSlot.startTime, 'dd.MM.yyyy')}"></td>
+      <td th:text="${#dates.format(studentLesson.timeSlot.startTime, 'HH:mm')}"></td>
+      <td th:text="${#dates.format(studentLesson.timeSlot.endTime, 'HH:mm')}"></td>
+      <td th:text="${studentLesson.timeSlot.price}"></td>
+      <td>
+        <a th:href="@{/catalog/showTutorInfo/{tutorId}(tutorId=${studentLesson.tutor.id})}" th:text="${studentLesson.tutor.name + ' ' + studentLesson.tutor.surname}"></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div th:if="${param.message}" class="alert alert-info" role="alert">
+    <p th:text="${param.message}"></p>
+  </div>
+  <a class="btn btn-secondary" th:href="@{/catalog/showTutorsCatalog}">Показати каталог</a>
+</div>
+</body>
+</html>

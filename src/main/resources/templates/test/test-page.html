@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Питання до тесту</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
+<body>
+<span th:replace="~{${!isUnregistered} ?
+        (${isAdmin} ? 'header/admin-panel' :
+            (${isStudent} ? 'header/student-panel' : 'header/tutor-panel'))
+        : 'header/unregistered-user-panel'}"></span>
+<div class="container mt-5">
+    <h1 class="mt-4">Питання</h1>
+    <form th:action="@{/test/submitTestAnswers}" method="post" th:object="${examAnswersWrapper}">
+        <input type="hidden" name="testId" th:value="${testId}" />
+        <div th:each="question, questionIndex : ${questions}" class="card my-4">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${question.text}"></h5>
+                <ul class="list-group">
+                    <li th:each="option, optionIndex : ${question.options}" class="list-group-item">
+                        <label th:for="'option' + ${questionIndex.index} + ${optionIndex.index}" th:text="${option.text}"></label>
+                    </li>
+                </ul>
+                <input type="hidden" th:attr="name='examAnswers[__${questionIndex.index}__].questionId'" th:value="${question.id}" />
+                <label for="correctOption">Оберіть номер відповіді:</label>
+                <input type="number" class="form-control" id="correctOption" name="price" th:field="*{examAnswers[__${questionIndex.index}__].answerIndex}"
+                       min="1" max="4" step="1">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Підтвердити</button>
+    </form>
+</div>
+</body>
+</html>

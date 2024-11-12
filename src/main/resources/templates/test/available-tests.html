@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Завершені тести</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+</head>
+<body>
+<span th:replace="~{${!isUnregistered} ?
+        (${isAdmin} ? 'header/admin-panel' :
+            (${isStudent} ? 'header/student-panel' : 'header/tutor-panel'))
+        : 'header/unregistered-user-panel'}"></span>
+<div class="container mt-5">
+  <h2>Доступні тести</h2>
+  <div class="pagination">
+    <div class="d-flex flex-column">
+      <div>
+        <form th:action="@{/test/openTestPage}" method="get">
+          <input type="number" id="pageSize" name="pageSize" min="1">
+          <button type="submit" class="btn btn-primary mb-2">Встановити кількість записів на сторінку</button>
+        </form>
+      </div>
+      <div>
+        <a th:href="@{/test/openTestPage(page=${-1})}" class="btn btn-primary" role="button">Попередня сторінка</a>
+        <a th:href="@{/test/openTestPage(page=${1})}" class="btn btn-primary" role="button">Наступна сторінка</a>
+      </div>
+    </div>
+  </div>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Назва</th>
+      <th>Спроба проходження тесту</th>
+      <th>Перегляд опису тесту та значення результатів</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="test : ${tests}">
+      <td th:text="${test.name}"></td>
+      <td>
+        <form th:action="@{/test/openTestPage/{testId}(testId=${test.id})}" method="get" style="display: inline;">
+          <button type="submit" class="btn btn-info">Пройти тест</button>
+        </form>
+      </td>
+      <td>
+        <form th:action="@{/test/openTestInfo/{testId}(testId=${test.id})}" method="get" style="display: inline;">
+          <button type="submit" class="btn btn-success">Значення результатів тесту</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div th:if="${param.message}" class="alert alert-info" role="alert">
+    <p th:text="${param.message}"></p>
+  </div>
+</div>
+</body>
+</html>

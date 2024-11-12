@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Чати користувача</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .messages-container {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .form-container form {
+      display: inline-block;
+      max-width: 100%;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 20px;
+      bottom: 0;
+    }
+    .form-container label {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<span th:replace="~{${!isUnregistered} ?
+        (${isAdmin} ? 'header/admin-panel' :
+            (${isStudent} ? 'header/student-panel' : 'header/tutor-panel'))
+        : 'header/unregistered-user-panel'}"></span>
+<div class="container mt-5">
+  <h2 class="mb-3">Чати користувача</h2>
+  <div class="container messages-container mt-5" id="messageContainer">
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">Користувач</th>
+      <th scope="col">Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+      <td>
+        <a th:href="@{/message/showMessagePage/{receiverId}(receiverId=${user.id})}" th:text="${user.email}"></a>
+      </td>
+      <td th:text="${user.name + ' ' + user.surname}"></td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+  <a class="btn btn-secondary" th:href="@{/catalog/showTutorsCatalog}">Показати каталог</a>
+  <div th:if="${param.message}" class="alert alert-info" role="alert">
+    <p th:text="${param.message}"></p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Рівень мови студентів</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <style>
+        body {
+            text-align: center;
+        }
+
+        .heading {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{header/tutor-panel}"></div>
+<h4 class="heading mt-3">Рівень мови студентів, з якими ви вже займаєтеся:</h4>
+<div class="d-flex justify-content-center">
+    <div class="form-check form-check-inline">
+        <div class="list-group-item mr-2" th:each="userLevel : ${userEnglishLevels}" th:text="${userLevel.name}"></div>
+    </div>
+</div>
+
+<h4 class="heading">Оберіть бажаний рівень мови студентів для занять з вами:</h4>
+<div class="d-flex justify-content-center">
+    <form action="#" th:action="@{/tutor/submitEnglishLevels}" method="post">
+        <div class="form-check form-check-inline" th:each="englishLevel : ${englishLevels}">
+            <input class="form-check-input" type="checkbox" th:id="'englishLevel-' + ${englishLevel.name}" th:name="'selectedLevels'" th:value="${englishLevel.name}" />
+            <label class="form-check-label" th:for="'englishLevel-' + ${englishLevel.name}" th:text="${englishLevel.name}"></label>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Підтвердити</button>
+    </form>
+</div>
+</body>
+</html>

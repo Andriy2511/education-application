@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Інформація про тест</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
+<body>
+<span th:replace="~{${!isUnregistered} ?
+        (${isAdmin} ? 'header/admin-panel' :
+            (${isStudent} ? 'header/student-panel' : 'header/tutor-panel'))
+        : 'header/unregistered-user-panel'}"></span>
+<div class="container mt-5">
+    <h2>Інформація про тест</h2>
+    <div th:if="${test}" class="mb-4">
+        <p><strong>Ім'я:</strong> <span th:text="${test.name}"></span></p>
+        <p><strong>Прізвище:</strong> <span th:text="${test.description}"></span></p>
+    </div>
+    <div th:if="${param.message}" class="alert alert-info" role="alert">
+        <p th:text="${param.message}"></p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .tutor-card {
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin: 10px;
+      text-align: center;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+    }
+
+    .tutor-photo {
+      width: 150px;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+    .btn-group form + form {
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+<span th:replace="~{${!isUnregistered} ?
+        (${isAdmin} ? 'header/admin-panel' :
+            (${isStudent} ? 'header/student-panel' : 'header/tutor-panel'))
+        : 'header/unregistered-user-panel'}"></span>
+<div class="background"></div>
+<div class="container mt-5">
+  <h1 class="text-center">Каталог</h1>
+  <div class="row mt-4">
+    <div class="col-md-10 offset-md-1">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <form th:action="@{/catalog/showTutorsCatalog}" method="get">
+            <input type="hidden" name="page" th:value="${paginationData.page}" />
+            <label for="pageSize">Показати</label>
+            <select id="pageSize" name="pageSize">
+              <option value="3" th:selected="${paginationData.pageSize == 3}">3</option>
+              <option value="6" th:selected="${paginationData.pageSize == 6}">6</option>
+              <option value="12" th:selected="${paginationData.pageSize == 12}">12</option>
+              <option value="24" th:selected="${paginationData.pageSize == 24}">24</option>
+            </select>
+            <label for="pageSize">записів на сторінку</label>
+            <div class="form-group d-inline">
+              <label class="mr-2">Підібрати викладача за рівнем мови:</label>
+              <div class="form-check form-check-inline" th:each="englishLevel : ${englishLevels}">
+                <input class="form-check-input" type="checkbox" id="englishLevel" name="selectedLevels" th:value="${englishLevel.name}" />
+                <label class="form-check-label" for="englishLevel" th:text="${englishLevel.name}"></label>
+              </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Застосувати</button>
+          </form>
+          <div style="margin-bottom: 20px;"></div>
+          <div class="pagination">
+            <a th:href="@{/catalog/showTutorsCatalog(page=0, pageSize=${paginationData.pageSize})}"
+               class="btn btn-primary" role="button">Перша сторінка</a>
+            <a th:href="@{/catalog/showTutorsCatalog(page=${paginationData.page - 1}, pageSize=${paginationData.pageSize})}"
+               th:if="${paginationData.page > 0}"
+               class="btn btn-primary ml-2" role="button">Попередня сторінка</a>
+            <a th:href="@{/catalog/showTutorsCatalog(page=${paginationData.page + 1}, pageSize=${paginationData.pageSize})}"
+               th:if="${paginationData.page < paginationData.totalPages - 1}"
+               class="btn btn-primary ml-2" role="button">Наступна сторінка</a>
+            <a th:href="@{/catalog/showTutorsCatalog(page=${paginationData.totalPages - 1}, pageSize=${paginationData.pageSize})}"
+               class="btn btn-primary ml-2" role="button">Остання сторінка</a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div th:each="tutor : ${tutors}" class="col-md-4">
+          <div class="tutor-card">
+            <img th:src="@{~/tutorphotos/{photo}(photo=${tutor.photo})}" class="tutor-photo" alt="Tutor Photo">
+            <h4><a th:href="@{/catalog/showTutorInfo/{id}(id=${tutor.id})}" th:text="${tutor.name + ' ' + tutor.surname}">Авто</a></h4>
+            <div class="btn-group">
+              <form th:action="@{/catalog/showTutorSchedule/{tutorId}(tutorId=${tutor.id})}" method="get">
+                <button class="btn btn-primary" type="submit">Розклад</button>
+              </form>
+              <form th:action="@{/message/showMessagePage/{receiverId}(receiverId=${tutor.id})}" method="get">
+                <button class="btn btn-success" type="submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-messenger" viewBox="0 0 16 16">
+                    <path d="M0 7.76C0 3.301 3.493 0 8 0s8 3.301 8 7.76-3.493 7.76-8 7.76c-.81 0-1.586-.107-2.316-.307a.64.64 0 0 0-.427.03l-1.588.702a.64.64 0 0 1-.898-.566l-.044-1.423a.64.64 0 0 0-.215-.456C.956 12.108 0 10.092 0 7.76m5.546-1.459-2.35 3.728c-.225.358.214.761.551.506l2.525-1.916a.48.48 0 0 1 .578-.002l1.869 1.402a1.2 1.2 0 0 0 1.735-.32l2.35-3.728c.226-.358-.214-.761-.551-.506L9.728 7.381a.48.48 0 0 1-.578.002L7.281 5.98a1.2 1.2 0 0 0-1.735.32z"/>
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
